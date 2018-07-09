@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name" translatable="false">TwitSplit</string>
+    <string name="message_chat_box_hint">Start a message</string>
+    <string name="message_send_image_button_description">Send</string>
+    <string name="user_name" translatable="false">hungthieu</string>
+    <string name="user_tag_name" translatable="false">\@hungthieu</string>
+</resources>

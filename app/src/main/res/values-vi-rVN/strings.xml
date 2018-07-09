@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="message_chat_box_hint">Bắt đầu hội thoại</string>
+    <string name="message_send_image_button_description">Gởi</string>
+</resources>
