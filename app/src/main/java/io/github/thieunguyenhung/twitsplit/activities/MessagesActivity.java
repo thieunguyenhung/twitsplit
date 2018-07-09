@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -21,6 +20,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.thieunguyenhung.twitsplit.R;
 import io.github.thieunguyenhung.twitsplit.adapters.MessageListAdapter;
+import io.github.thieunguyenhung.twitsplit.business.MessageSplitterImpl;
 import io.github.thieunguyenhung.twitsplit.models.Message;
 
 public class MessagesActivity extends AppCompatActivity {
@@ -80,7 +80,6 @@ public class MessagesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String chatMessage = messageChatBoxTxt.getText().toString();
-                Log.d("TESTTTTT", String.valueOf(chatMessage.isEmpty()));
                 if (!chatMessage.isEmpty()) {
                     if (chatMessage.length() > 50) {
                         if (chatMessage.trim().isEmpty()) {
@@ -95,7 +94,10 @@ public class MessagesActivity extends AppCompatActivity {
 
                         }
                     }
-                    dataChatMessages.add(new Message(chatMessage, Calendar.getInstance()));
+                    List<String> result = new MessageSplitterImpl().splitMessage(chatMessage);
+                    for (String message : result) {
+                        dataChatMessages.add(new Message(message, Calendar.getInstance()));
+                    }
                     messagesRecyclerView.scrollToPosition(dataChatMessages.size() - 1);
                     messageListAdapter.notifyDataSetChanged();
                     messageChatBoxTxt.getText().clear();

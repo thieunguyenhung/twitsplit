@@ -3,5 +3,7 @@ package io.github.thieunguyenhung.twitsplit.business;
 import java.util.List;
 
 public interface MessageSplitterInf {
-    public List<String> splitMessage();
+    int MAX_LENGTH = 50;
+
+    List splitMessage(String chatMessageText);
 }
