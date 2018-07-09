@@ -2,4 +2,6 @@
 <resources>
     <string name="message_chat_box_hint">Bắt đầu hội thoại</string>
     <string name="message_send_image_button_description">Gởi</string>
+    <string name="error_message_only_white_space">Lỗi! Nội dung chat chỉ chứa khoảng trắng</string>
+    <string name="btn_dismiss">Ẩn</string>
 </resources>

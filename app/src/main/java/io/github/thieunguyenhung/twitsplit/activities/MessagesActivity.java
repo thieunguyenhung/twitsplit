@@ -1,10 +1,13 @@
 package io.github.thieunguyenhung.twitsplit.activities;
 
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -13,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.github.thieunguyenhung.twitsplit.R;
@@ -20,6 +24,7 @@ import io.github.thieunguyenhung.twitsplit.adapters.MessageListAdapter;
 import io.github.thieunguyenhung.twitsplit.models.Message;
 
 public class MessagesActivity extends AppCompatActivity {
+    /*Bind view*/
     @BindView(R.id.toolbarMessages)
     Toolbar toolbarMessages;
     @BindView(R.id.messagesRecyclerView)
@@ -28,8 +33,15 @@ public class MessagesActivity extends AppCompatActivity {
     ImageButton messagesSendButton;
     @BindView(R.id.messageChatBoxTxt)
     EditText messageChatBoxTxt;
-    private MessageListAdapter messageListAdapter;
-    private List<Message> dataChatMessages;
+    @BindView(R.id.messageRootLayout)
+    CoordinatorLayout messageRootLayout;
+    /*Bind resources*/
+    @BindString(R.string.error_message_only_white_space)
+    String ERROR_MESS_WHITE_SPACE;
+    @BindString(R.string.btn_dismiss)
+    String BTN_DISMISS;
+    MessageListAdapter messageListAdapter;
+    List<Message> dataChatMessages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +80,21 @@ public class MessagesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String chatMessage = messageChatBoxTxt.getText().toString();
+                Log.d("TESTTTTT", String.valueOf(chatMessage.isEmpty()));
                 if (!chatMessage.isEmpty()) {
+                    if (chatMessage.length() > 50) {
+                        if (chatMessage.trim().isEmpty()) {
+                            final Snackbar snackbar = Snackbar.make(messageRootLayout, ERROR_MESS_WHITE_SPACE, Snackbar.LENGTH_INDEFINITE);
+                            snackbar.setAction(BTN_DISMISS, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    snackbar.dismiss();
+                                }
+                            });
+                            snackbar.show();
+
+                        }
+                    }
                     dataChatMessages.add(new Message(chatMessage, Calendar.getInstance()));
                     messagesRecyclerView.scrollToPosition(dataChatMessages.size() - 1);
                     messageListAdapter.notifyDataSetChanged();
