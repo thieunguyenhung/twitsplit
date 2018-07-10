@@ -1,15 +1,16 @@
 package io.github.thieunguyenhung.twitsplit.models;
 
-import java.time.LocalDateTime;
 import java.util.Calendar;
 
 public class Message {
     private String messageText;
     private Calendar sentTime;
+    private int itemBackgroundResource;
 
-    public Message(String messageText, Calendar sentTime) {
+    public Message(String messageText, Calendar sentTime, int itemBackgroundResource) {
         this.messageText = messageText;
         this.sentTime = sentTime;
+        this.itemBackgroundResource = itemBackgroundResource;
     }
 
     public String getMessageText() {
@@ -26,5 +27,13 @@ public class Message {
 
     public void setSentTime(Calendar sentTime) {
         this.sentTime = sentTime;
+    }
+
+    public int getItemBackgroundResource() {
+        return itemBackgroundResource;
+    }
+
+    public void setItemBackgroundResource(int itemBackgroundResource) {
+        this.itemBackgroundResource = itemBackgroundResource;
     }
 }

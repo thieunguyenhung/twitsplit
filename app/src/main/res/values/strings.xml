@@ -6,4 +6,5 @@
     <string name="user_tag_name" translatable="false">\@hungthieu</string>
     <string name="error_message_only_white_space">Error! Message contains only white spaces</string>
     <string name="btn_dismiss">Dismiss</string>
+    <string name="message_seen_indicator_image_description">Seen</string>
 </resources>

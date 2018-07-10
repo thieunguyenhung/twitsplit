@@ -44,18 +44,21 @@ public class MessageSplitterImpl implements MessageSplitterInf {
         }
 
         List<String> results = new ArrayList<>();
-        String tempMessageText = "";
+        StringBuilder tempMessageBuilder = new StringBuilder();
         int sentencesCounter = 1;
 
         for (String word : words) {
-            if (tempMessageText.length() + word.length() + 1 > MAX_LENGTH) {
-                results.add(sentencesCounter + "/" + totalSentences + " " + tempMessageText.trim());
+            if (tempMessageBuilder.length() + word.length() + 1 > MAX_LENGTH) {
+                results.add(sentencesCounter + "/" + totalSentences + " " + tempMessageBuilder.toString());
                 sentencesCounter += 1;
-                tempMessageText = "";
+                tempMessageBuilder = new StringBuilder();
             }
-            tempMessageText += " " + word;
+            if (tempMessageBuilder.length() > 0) {
+                tempMessageBuilder.append(" ");
+            }
+            tempMessageBuilder.append(word);
         }
-        results.add(sentencesCounter + "/" + totalSentences + " " + tempMessageText.trim());
+        results.add(sentencesCounter + "/" + totalSentences + " " + tempMessageBuilder.toString());
 
         return results;
     }

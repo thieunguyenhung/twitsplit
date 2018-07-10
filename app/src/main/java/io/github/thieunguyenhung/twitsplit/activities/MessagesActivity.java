@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -79,22 +80,33 @@ public class MessagesActivity extends AppCompatActivity {
     private void addEvents() {
         messagesSendButton.setOnClickListener(buttonView -> {
             String chatMessage = messageChatBoxTxt.getText().toString();
+            messageChatBoxTxt.getText().clear();
             if (!chatMessage.isEmpty()) {
-                if (chatMessage.length() > 50) {
-                    if (chatMessage.trim().isEmpty()) {
-                        final Snackbar snackbar = Snackbar.make(messageRootLayout, ERROR_MESS_WHITE_SPACE, Snackbar.LENGTH_INDEFINITE);
-                        snackbar.setAction(BTN_DISMISS, snackbarView -> snackbar.dismiss());
-                        snackbar.show();
-                    }
+                if (chatMessage.trim().isEmpty()) {
+                    final Snackbar snackbar = Snackbar.make(messageRootLayout, ERROR_MESS_WHITE_SPACE, Snackbar.LENGTH_INDEFINITE);
+                    snackbar.setAction(BTN_DISMISS, snackbarView -> snackbar.dismiss());
+                    snackbar.show();
+                    return;
                 }
                 List<String> result = new MessageSplitterImpl().splitMessage(chatMessage);
                 if (CollectionUtils.isNotEmpty(result)) {
-                    for (String message : result) {
-                        dataChatMessages.add(new Message(message, Calendar.getInstance()));
+                    for (int i = 0; i < result.size(); i++) {
+                        Log.d("SENTENCES: ", "[" + result.get(i) + "]");
+                        Message message = new Message(result.get(i), Calendar.getInstance(), R.drawable.message_sent_middle_background);
+                        if (i == 0) {
+                            if (i != result.size() - 1) {
+                                message.setSentTime(null);
+                            }
+                            message.setItemBackgroundResource(R.drawable.message_sent_top_background);
+                        } else if (i == result.size() - 1) {
+                            message.setItemBackgroundResource(R.drawable.message_sent_bottom_background);
+                        } else {
+                            message.setSentTime(null);
+                        }
+                        dataChatMessages.add(message);
                     }
                     messagesRecyclerView.scrollToPosition(dataChatMessages.size() - 1);
                     messageListAdapter.notifyDataSetChanged();
-                    messageChatBoxTxt.getText().clear();
                 }
             }
         });
