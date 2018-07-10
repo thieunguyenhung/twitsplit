@@ -7,9 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -76,25 +77,18 @@ public class MessagesActivity extends AppCompatActivity {
     }
 
     private void addEvents() {
-        messagesSendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String chatMessage = messageChatBoxTxt.getText().toString();
-                if (!chatMessage.isEmpty()) {
-                    if (chatMessage.length() > 50) {
-                        if (chatMessage.trim().isEmpty()) {
-                            final Snackbar snackbar = Snackbar.make(messageRootLayout, ERROR_MESS_WHITE_SPACE, Snackbar.LENGTH_INDEFINITE);
-                            snackbar.setAction(BTN_DISMISS, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    snackbar.dismiss();
-                                }
-                            });
-                            snackbar.show();
-
-                        }
+        messagesSendButton.setOnClickListener(buttonView -> {
+            String chatMessage = messageChatBoxTxt.getText().toString();
+            if (!chatMessage.isEmpty()) {
+                if (chatMessage.length() > 50) {
+                    if (chatMessage.trim().isEmpty()) {
+                        final Snackbar snackbar = Snackbar.make(messageRootLayout, ERROR_MESS_WHITE_SPACE, Snackbar.LENGTH_INDEFINITE);
+                        snackbar.setAction(BTN_DISMISS, snackbarView -> snackbar.dismiss());
+                        snackbar.show();
                     }
-                    List<String> result = new MessageSplitterImpl().splitMessage(chatMessage);
+                }
+                List<String> result = new MessageSplitterImpl().splitMessage(chatMessage);
+                if (CollectionUtils.isNotEmpty(result)) {
                     for (String message : result) {
                         dataChatMessages.add(new Message(message, Calendar.getInstance()));
                     }

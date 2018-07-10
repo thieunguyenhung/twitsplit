@@ -5,28 +5,58 @@ import org.apache.commons.collections4.CollectionUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class MessageSplitterImpl implements MessageSplitterInf {
+    private static int MAX_LENGTH;
+
+    public MessageSplitterImpl() {
+        MAX_LENGTH = MessageSplitterInf.MAX_LENGTH;
+    }
 
     @Override
     public List<String> splitMessage(String chatMessageText) {
-        List<String> words = Arrays.asList(chatMessageText.trim().split(" "));
+        final List<String> words = Arrays.asList(chatMessageText.trim().split(" "));
         if (CollectionUtils.isEmpty(words)) {
             return null;
         }
-//        Log.d("ORIGINAL", words.toString());
-        List<String> results = new ArrayList<>();
-        String tempMessageText = "";
-        for (String word : words) {
-            if (tempMessageText.length() + word.length() + 1 <= MAX_LENGTH) {
-                tempMessageText += " " + word;
-                tempMessageText = tempMessageText.trim();
+
+        int currentIndicatorLength = -1;
+        int nextIndicatorLength = 0;
+        int currentMaxLength = MAX_LENGTH;
+        int totalSentences = -1;
+        while (currentIndicatorLength != nextIndicatorLength) {
+            int tempMaxLength = LengthCalculator.calculateMaxLengthAndTotalSentences(currentMaxLength, words).get(LengthCalculator.MAX_LENGTH_KEY);
+            currentIndicatorLength = currentMaxLength - tempMaxLength;
+
+            Map<String, Integer> nextLengthMap = LengthCalculator.calculateMaxLengthAndTotalSentences(tempMaxLength, words);
+            int nextMaxLength = nextLengthMap.get(LengthCalculator.MAX_LENGTH_KEY);
+            nextIndicatorLength = tempMaxLength - nextMaxLength;
+
+            if (currentIndicatorLength == nextIndicatorLength) {
+                MAX_LENGTH = tempMaxLength;
+                totalSentences = nextLengthMap.get(LengthCalculator.TOTAL_SENTENCES_KEY) + 1;
             } else {
-                results.add(new String(tempMessageText));
-                tempMessageText = "";
+                currentMaxLength = nextMaxLength;
+                currentIndicatorLength = nextIndicatorLength;
+                nextIndicatorLength = 0;
             }
         }
-        results.add(tempMessageText);
+
+        List<String> results = new ArrayList<>();
+        String tempMessageText = "";
+        int sentencesCounter = 1;
+
+        for (String word : words) {
+            if (tempMessageText.length() + word.length() + 1 > MAX_LENGTH) {
+                results.add(sentencesCounter + "/" + totalSentences + " " + tempMessageText.trim());
+                sentencesCounter += 1;
+                tempMessageText = "";
+            }
+            tempMessageText += " " + word;
+        }
+        results.add(sentencesCounter + "/" + totalSentences + " " + tempMessageText.trim());
+
         return results;
     }
 }
