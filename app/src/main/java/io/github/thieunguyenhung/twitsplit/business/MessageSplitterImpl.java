@@ -16,6 +16,9 @@ public class MessageSplitterImpl implements MessageSplitterInf {
 
     @Override
     public List<String> splitMessage(String chatMessageText) {
+        if (chatMessageText.isEmpty()) {
+            return null;
+        }
         final List<String> words = Arrays.asList(chatMessageText.trim().split(" "));
         if (CollectionUtils.isEmpty(words)) {
             return null;
@@ -35,7 +38,7 @@ public class MessageSplitterImpl implements MessageSplitterInf {
 
             if (currentIndicatorLength == nextIndicatorLength) {
                 MAX_LENGTH = tempMaxLength;
-                totalSentences = nextLengthMap.get(LengthCalculator.TOTAL_SENTENCES_KEY) + 1;
+                totalSentences = nextLengthMap.get(LengthCalculator.TOTAL_SENTENCES_KEY);
             } else {
                 currentMaxLength = nextMaxLength;
                 currentIndicatorLength = nextIndicatorLength;

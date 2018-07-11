@@ -11,15 +11,18 @@ public class LengthCalculator {
     public static Map<String, Integer> calculateMaxLengthAndTotalSentences(int maxLength, final List<String> words) {
         Map<String, Integer> resultMap = new HashMap<>();
         int totalSentences = 0;
-        String tempMessageText = "";
+        StringBuilder tempMessageBuilder = new StringBuilder();
         for (String word : words) {
-            if (tempMessageText.length() + word.length() + 1 > maxLength) {
+            if (tempMessageBuilder.length() + word.length() + 1 > maxLength) {
                 totalSentences += 1;
-                tempMessageText = "";
+                tempMessageBuilder = new StringBuilder();
             }
-            tempMessageText += " " + word;
+            if (tempMessageBuilder.length() > 0) {
+                tempMessageBuilder.append(" ");
+            }
+            tempMessageBuilder.append(word);
         }
-        maxLength = maxLength - (String.valueOf(totalSentences).length() * 2 + 1);
+        maxLength = maxLength - (String.valueOf(totalSentences).length() * 2 + 2);
 
         resultMap.put(MAX_LENGTH_KEY, maxLength);
         resultMap.put(TOTAL_SENTENCES_KEY, totalSentences);
