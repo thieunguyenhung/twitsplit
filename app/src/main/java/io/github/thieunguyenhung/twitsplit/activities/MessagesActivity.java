@@ -70,7 +70,7 @@ public class MessagesActivity extends AppCompatActivity {
 
     private void initializeRecyclerView() {
         dataChatMessages = new ArrayList<>();
-        messageListAdapter = new MessageListAdapter(dataChatMessages);
+        messageListAdapter = new MessageListAdapter(MessagesActivity.this, dataChatMessages, messageRootLayout);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mLayoutManager.setStackFromEnd(true);
         messagesRecyclerView.setLayoutManager(mLayoutManager);
@@ -91,7 +91,6 @@ public class MessagesActivity extends AppCompatActivity {
                 List<String> result = new MessageSplitterImpl().splitMessage(chatMessage);
                 if (CollectionUtils.isNotEmpty(result)) {
                     for (int i = 0; i < result.size(); i++) {
-                        Log.d("SENTENCES: ", "[" + result.get(i) + "]");
                         Message message = new Message(result.get(i), Calendar.getInstance(), R.drawable.message_sent_middle_background);
                         if (i == 0) {
                             if (i != result.size() - 1) {

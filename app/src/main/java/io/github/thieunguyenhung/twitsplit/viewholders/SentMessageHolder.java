@@ -1,5 +1,10 @@
 package io.github.thieunguyenhung.twitsplit.viewholders;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -25,7 +30,21 @@ public class SentMessageHolder extends RecyclerView.ViewHolder {
         dateFormatter = new SimpleDateFormat("h:mm a", Locale.getDefault());
     }
 
-    public void bind(Message message) {
+    private void addEvents(CoordinatorLayout rootLayout, Context context) {
+        messageTxt.setOnLongClickListener(view -> {
+            ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = android.content.ClipData.newPlainText("Text Copied", messageTxt.getText().toString());
+            if (clipboard != null) {
+                clipboard.setPrimaryClip(clip);
+                final Snackbar snackbar = Snackbar.make(rootLayout, context.getResources().getText(R.string.text_copy), Snackbar.LENGTH_SHORT);
+                snackbar.setAction(context.getResources().getText(R.string.btn_dismiss), snackbarView -> snackbar.dismiss());
+                snackbar.show();
+            }
+            return false;
+        });
+    }
+
+    public void bind(Context context, CoordinatorLayout rootLayout, Message message) {
         messageTxt.setText(message.getMessageText());
         if (message.getItemBackgroundResource() != Integer.MIN_VALUE) {
             messageTxt.setBackgroundResource(message.getItemBackgroundResource());
@@ -38,5 +57,7 @@ public class SentMessageHolder extends RecyclerView.ViewHolder {
             itemMessageSentTime.setVisibility(View.GONE);
             itemMessageSeenImage.setVisibility(View.GONE);
         }
+
+        addEvents(rootLayout, context);
     }
 }

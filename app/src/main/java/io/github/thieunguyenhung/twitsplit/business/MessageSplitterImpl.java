@@ -38,7 +38,7 @@ public class MessageSplitterImpl implements MessageSplitterInf {
 
             if (currentIndicatorLength == nextIndicatorLength) {
                 MAX_LENGTH = tempMaxLength;
-                totalSentences = nextLengthMap.get(LengthCalculator.TOTAL_SENTENCES_KEY);
+                totalSentences = nextLengthMap.get(LengthCalculator.TOTAL_SENTENCES_KEY) + 1;
             } else {
                 currentMaxLength = nextMaxLength;
                 currentIndicatorLength = nextIndicatorLength;

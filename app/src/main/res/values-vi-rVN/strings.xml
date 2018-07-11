@@ -5,4 +5,5 @@
     <string name="error_message_only_white_space">Lỗi! Nội dung chat chỉ chứa khoảng trắng</string>
     <string name="btn_dismiss">Ẩn</string>
     <string name="message_seen_indicator_image_description">Đã xem</string>
+    <string name="text_copy">Đã sao chép</string>
 </resources>
